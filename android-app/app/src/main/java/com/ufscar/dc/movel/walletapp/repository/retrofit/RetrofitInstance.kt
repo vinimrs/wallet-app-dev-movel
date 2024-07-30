@@ -8,21 +8,21 @@ object RetrofitInstance {
     const val BASE_URL = "http://10.0.2.2:3000/"
     const val TO_TEST_URL = "http://localhost:3000/"
 
-    val api: BoardInterface by lazy {
+    val api: UserInterface by lazy {
         val retrofit = Retrofit.Builder()
             .baseUrl(BASE_URL)
             .addConverterFactory(GsonConverterFactory.create())
             .build()
 
-        retrofit.create(BoardInterface::class.java)
+        retrofit.create(UserInterface::class.java)
     }
 
-    val testApi: BoardInterface by lazy {
+    val testApi: UserInterface by lazy {
         val retrofit = Retrofit.Builder()
             .baseUrl(TO_TEST_URL)
             .addConverterFactory(GsonConverterFactory.create())
             .build()
 
-        retrofit.create(BoardInterface::class.java)
+        retrofit.create(UserInterface::class.java)
     }
 }

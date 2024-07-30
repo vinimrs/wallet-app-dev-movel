@@ -6,13 +6,12 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.ufscar.dc.movel.walletapp.repository.common.Board
-import com.ufscar.dc.movel.walletapp.repository.common.BoardRepository
-import com.ufscar.dc.movel.walletapp.repository.common.Message
+import com.ufscar.dc.movel.walletapp.repository.common.User
+import com.ufscar.dc.movel.walletapp.repository.common.UserRepository
 import kotlinx.coroutines.launch
 
 class MainViewModel : ViewModel() {
-    private val repository = BoardRepository()
+    private val repository = UserRepository()
 
     var email by mutableStateOf("")
     var password by mutableStateOf("")
@@ -22,8 +21,7 @@ class MainViewModel : ViewModel() {
     var selectedCategory by mutableStateOf("")
 
     var numberOfBoardsMsg by mutableStateOf("")
-    var boards = mutableStateListOf<Board>()
-    var messages = mutableStateListOf<Message>()
+    var users = mutableStateListOf<User>()
     var showNetworkErrorSnackBar by mutableStateOf(false)
 
     var msg_boardID by mutableStateOf("")
@@ -34,7 +32,7 @@ class MainViewModel : ViewModel() {
         viewModelScope.launch {
             email = email1
             password = password1
-//            repository.login(username, password)
+            repository.login(email, password)
         }
     }
 
@@ -68,22 +66,6 @@ class MainViewModel : ViewModel() {
         }
     }
 
-    fun getBoards() {
-        viewModelScope.launch {
-            try {
-                val rBoards = repository.getBoards()
-                numberOfBoardsMsg = "#Boards: " + rBoards.size
-                boards.clear()
-                rBoards.forEach { boards.add(it) }
-            } catch (e: Exception) {
-                numberOfBoardsMsg = ""
-                boards.clear()
-                showNetworkErrorSnackBar = true
-            }
-        }
-        numberOfBoardsMsg = "loading..."
-    }
-
     fun dismissNetworkErrorSnackBar() {
         showNetworkErrorSnackBar = false
     }
@@ -107,22 +89,4 @@ class MainViewModel : ViewModel() {
         }
     }
 
-    fun loadMessages() {
-        if (validateBoardId()) {
-            viewModelScope.launch {
-                val rMessages = repository.getMessages(msg_boardID.toLong())
-                messages.clear()
-                rMessages.forEach {
-                    messages.add(it)
-                }
-            }
-        }
-    }
-
-    fun postMessage(boardId: String, from: String, to: String, text: String) {
-        viewModelScope.launch {
-            val newMsg = Message(from, to, text)
-            repository.postMessage(boardId.toLong(), newMsg)
-        }
-    }
 }

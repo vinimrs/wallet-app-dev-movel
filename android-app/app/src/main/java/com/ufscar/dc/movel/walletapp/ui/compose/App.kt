@@ -88,15 +88,6 @@ fun App(
 //                    onDeleteBoardClicked = { navController.navigate("DeleteBoard") }
 //                )
 //            }
-            composable("PostMessage") {
-                PostMessage(mainViewModel)
-            }
-            composable("BoardMessages") {
-                BoardMessages(mainViewModel)
-            }
-            composable("DeleteBoard") {
-                DeleteBoard(mainViewModel)
-            }
         }
     }
 
