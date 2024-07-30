@@ -93,8 +93,14 @@ fun TransactionScreen(
                     onValueChange = { selectedCategory = it },
                     label = { Text("Categoria") },
                     readOnly = true,
-                    modifier = Modifier.fillMaxWidth().clickable { expanded = true }
+                    modifier = Modifier.fillMaxWidth()
+
                 )
+                Box(
+                    modifier = Modifier
+                        .matchParentSize()
+                        .clickable { expanded = true }
+                ) // Caixa transparente que detecta cliques
                 DropdownMenu(
                     expanded = expanded,
                     onDismissRequest = { expanded = false },

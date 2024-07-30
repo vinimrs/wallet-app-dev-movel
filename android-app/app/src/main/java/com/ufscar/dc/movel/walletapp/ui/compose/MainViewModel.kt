@@ -32,7 +32,7 @@ class MainViewModel : ViewModel() {
         viewModelScope.launch {
             email = email1
             password = password1
-            repository.login(email, password)
+//            repository.login(email, password)
         }
     }
 
