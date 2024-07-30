@@ -53,11 +53,32 @@ fun App(
             composable("Login") {
                 LoginScreen(
                     mainViewModel,
-                    onLoginClicked = { navController.navigate("Main") }
+                    onLoginClicked = { navController.navigate("Main") },
+                    onRegisterButtonClicked = { navController.navigate("Register")}
                 )
             }
+
+            composable("Register") {
+                RegisterScreen(
+                    mainViewModel,
+                    onRegisterClicked = { navController.navigate("Main") },
+                    onLoginButtonClicked = { navController.navigate("Login") }
+                )
+            }
+
+            composable("Transaction") {
+                TransactionScreen(
+                    mainViewModel,
+                    onTransactionCancelledClicked = { navController.navigate("Main") },
+                    onTransactionConfirmedClicked = { navController.navigate("Main") }
+                )
+            }
+
             composable("Main") {
-                MainScreen(mainViewModel)
+                MainScreen(
+                    mainViewModel,
+                    onNewTransactionClicked = { navController.navigate("Transaction") }
+                )
             }
 //            composable("Initial") {
 //                InitialScreen(

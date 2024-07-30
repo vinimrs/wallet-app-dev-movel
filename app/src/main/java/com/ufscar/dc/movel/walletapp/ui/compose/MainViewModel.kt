@@ -16,6 +16,10 @@ class MainViewModel : ViewModel() {
 
     var email by mutableStateOf("")
     var password by mutableStateOf("")
+    var name by mutableStateOf("")
+    var amount by mutableStateOf(0.0)
+    var transactionType by mutableStateOf("")
+    var selectedCategory by mutableStateOf("")
 
     var numberOfBoardsMsg by mutableStateOf("")
     var boards = mutableStateListOf<Board>()
@@ -42,16 +46,26 @@ class MainViewModel : ViewModel() {
         }
     }
 
-    fun register(email1: String, password1: String) {
+    fun register(name1: String, email1: String, password1: String) {
         viewModelScope.launch {
             email = email1
             password = password1
+            name = name1
 //            repository.register(username, password)
         }
     }
 
     fun getUserName(): String {
         return email
+    }
+
+    fun addTransaction (transactionType1: String, amount1: Double, selectedCategory1: String){
+        viewModelScope.launch {
+            amount = amount1
+            transactionType = transactionType1
+            selectedCategory = selectedCategory1
+//            repository.addTransaction(transactionType, amount, selectedCategory)
+        }
     }
 
     fun getBoards() {

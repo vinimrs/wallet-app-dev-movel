@@ -28,7 +28,8 @@ import com.ufscar.dc.movel.walletapp.ui.theme.WalletAppTheme
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MainScreen(
-    viewModel: MainViewModel = viewModel()
+    viewModel: MainViewModel = viewModel(),
+    onNewTransactionClicked: () -> Unit = {}
 ) {
     Column(
         modifier = Modifier
@@ -91,7 +92,7 @@ fun MainScreen(
             horizontalArrangement = Arrangement.SpaceEvenly
         ) {
             Button(
-                onClick = { /* Handle new record click */ },
+                onClick = { onNewTransactionClicked() },
                 modifier = Modifier.weight(1f),
                 colors = ButtonDefaults.buttonColors(Color(0xFF4CAF50)),
                 shape = RoundedCornerShape(8.dp)

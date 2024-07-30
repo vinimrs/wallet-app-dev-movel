@@ -23,7 +23,8 @@ import com.ufscar.dc.movel.walletapp.ui.theme.WalletAppTheme
 @Composable
 fun LoginScreen(
     mainViewModel: MainViewModel = viewModel(),
-    onLoginClicked: () -> Unit = {}
+    onLoginClicked: () -> Unit = {},
+    onRegisterButtonClicked: () -> Unit = {}
 ) {
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
@@ -64,7 +65,7 @@ fun LoginScreen(
         Spacer(modifier = Modifier.height(8.dp))
 
         TextButton(onClick = {
-            onLoginClicked()
+            onRegisterButtonClicked()
         }) {
             Text(text = "Não possui cadastro? ")
             Text(text = "Fazer cadastro", textDecoration = TextDecoration.Underline)
