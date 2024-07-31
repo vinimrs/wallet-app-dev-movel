@@ -4,7 +4,6 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Person
-import androidx.compose.material.icons.filled.Email
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -13,12 +12,15 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.ufscar.dc.movel.walletapp.R
 import com.ufscar.dc.movel.walletapp.ui.theme.WalletAppTheme
 
 @Composable
@@ -30,6 +32,7 @@ fun RegisterScreen(
     var name by remember { mutableStateOf("") }
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
+    val greenColor = Color(0xFF01AA71)
 
     Column(
         modifier = Modifier
@@ -40,17 +43,17 @@ fun RegisterScreen(
     ) {
         Icon(
             imageVector = Icons.Default.Person, // Altere para o ícone desejado
-            contentDescription = "User Icon",
+            contentDescription = stringResource(id = R.string.user_icon),
             modifier = Modifier.size(64.dp),
-            tint = MaterialTheme.colorScheme.primary
+            tint = greenColor
         )
         Spacer(modifier = Modifier.height(16.dp))
-        Text(text = "Faça seu cadastro", fontSize = 32.sp)
+        Text(text = stringResource(id = R.string.register), fontSize = 32.sp)
         Spacer(modifier = Modifier.height(16.dp))
         OutlinedTextField(
             value = name,
             onValueChange = { name = it },
-            label = { Text("Nome") },
+            label = { Text(stringResource(id = R.string.name)) },
             singleLine = true,
             modifier = Modifier.fillMaxWidth()
         )
@@ -58,7 +61,7 @@ fun RegisterScreen(
         OutlinedTextField(
             value = email,
             onValueChange = { email = it },
-            label = { Text("E-mail") },
+            label = { Text(stringResource(id = R.string.email)) },
             singleLine = true,
             modifier = Modifier.fillMaxWidth()
         )
@@ -66,7 +69,7 @@ fun RegisterScreen(
         OutlinedTextField(
             value = password,
             onValueChange = { password = it },
-            label = { Text("Senha") },
+            label = { Text(stringResource(id = R.string.password)) },
             singleLine = true,
             visualTransformation = PasswordVisualTransformation(),
             modifier = Modifier.fillMaxWidth()
@@ -76,11 +79,12 @@ fun RegisterScreen(
         TextButton(onClick = {
             onLoginButtonClicked()
         }) {
-            Text(text = "Já possui conta? ")
-            Text(text = "Fazer login", textDecoration = TextDecoration.Underline)
+            Text(text = stringResource(id = R.string.already_have_account), color = greenColor)
+            Text(text = stringResource(id = R.string.login), textDecoration = TextDecoration.Underline, color = greenColor)
         }
         Spacer(modifier = Modifier.height(16.dp))
         Button(
+            colors = ButtonDefaults.buttonColors(greenColor),
             onClick = {
                 mainViewModel.register(name, email, password)
                 onRegisterClicked()
@@ -90,7 +94,7 @@ fun RegisterScreen(
                 .height(48.dp),
             shape = RoundedCornerShape(8.dp),
         ) {
-            Text(text = "Cadastrar", fontSize = 16.sp)
+            Text(text = stringResource(id = R.string.register), fontSize = 16.sp)
         }
     }
 }

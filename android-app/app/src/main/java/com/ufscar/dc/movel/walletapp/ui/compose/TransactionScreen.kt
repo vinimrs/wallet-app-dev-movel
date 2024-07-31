@@ -1,6 +1,6 @@
 package com.ufscar.dc.movel.walletapp.ui.compose
 
-
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -12,13 +12,15 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.ufscar.dc.movel.walletapp.R
 import com.ufscar.dc.movel.walletapp.ui.theme.WalletAppTheme
-
 
 @Composable
 fun TransactionScreen(
@@ -29,45 +31,69 @@ fun TransactionScreen(
     var transactionType by remember { mutableStateOf("Receita") }
     var amount by remember { mutableStateOf("") }
     var selectedCategory by remember { mutableStateOf("") }
-    val categories = listOf("Mercado", "Saúde", "Lazer", "Contas")
+    val greenColor = Color(0xFF01AA71)
+    val incomeString = stringResource(id = R.string.income)
+    val expenseString = stringResource(id = R.string.expense)
+    val categories = listOf(
+        stringResource(id = R.string.market),
+        stringResource(id = R.string.health),
+        stringResource(id = R.string.leisure),
+        stringResource(id = R.string.bills)
+    )
 
     Column(
         modifier = Modifier
-            .fillMaxSize()
-            .padding(16.dp),
+            .fillMaxSize(),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        // Header with close and confirm icons
-        Row(
+        // Header and SubHeader combined with green background
+        Column(
             modifier = Modifier
                 .fillMaxWidth()
+                .background(greenColor)
                 .padding(vertical = 16.dp),
-            horizontalArrangement = Arrangement.SpaceBetween,
-            verticalAlignment = Alignment.CenterVertically
+            horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            IconButton(onClick = onTransactionCancelledClicked) {
-                Icon(imageVector = Icons.Default.Close, contentDescription = "Cancelar")
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 0.dp),  // Remover padding horizontal
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                IconButton(onClick = onTransactionCancelledClicked) {
+                    Icon(imageVector = Icons.Default.Close, contentDescription = stringResource(id = R.string.cancel), tint = Color.White)
+                }
+                IconButton(onClick = {
+                    mainViewModel.addTransaction(transactionType, amount.toDoubleOrNull() ?: 0.0, selectedCategory)
+                    onTransactionConfirmedClicked()
+                }) {
+                    Icon(imageVector = Icons.Default.Check, contentDescription = stringResource(id = R.string.confirm), tint = Color.White)
+                }
             }
-            IconButton(onClick = {
-                mainViewModel.addTransaction(transactionType, amount.toDoubleOrNull() ?: 0.0, selectedCategory)
-                onTransactionConfirmedClicked()
-            }) {
-                Icon(imageVector = Icons.Default.Check, contentDescription = "Confirmar")
-            }
-        }
 
-        // SubHeader for selecting transaction type
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(vertical = 16.dp),
-            horizontalArrangement = Arrangement.SpaceEvenly
-        ) {
-            TextButton(onClick = { transactionType = "Receita" }) {
-                Text(text = "Receita", fontSize = 18.sp, color = if (transactionType == "Receita") MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurface)
-            }
-            TextButton(onClick = { transactionType = "Despesa" }) {
-                Text(text = "Despesa", fontSize = 18.sp, color = if (transactionType == "Despesa") MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurface)
+            Spacer(modifier = Modifier.height(8.dp))
+            Divider(color = Color.White, thickness = 1.dp)
+            Spacer(modifier = Modifier.height(8.dp))
+
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceEvenly
+            ) {
+                TextButton(onClick = { transactionType = incomeString }) {
+                    Text(
+                        text = incomeString,
+                        fontSize = 18.sp,
+                        color = if (transactionType == incomeString) Color.White else Color.Black
+                    )
+                }
+                TextButton(onClick = { transactionType = expenseString }) {
+                    Text(
+                        text = expenseString,
+                        fontSize = 18.sp,
+                        color = if (transactionType == expenseString) Color.White else Color.Black
+                    )
+                }
             }
         }
 
@@ -75,26 +101,25 @@ fun TransactionScreen(
         OutlinedTextField(
             value = amount,
             onValueChange = { amount = it },
-            label = { Text("Valor (R$)") },
+            label = { Text(stringResource(id = R.string.amount)) },
             singleLine = true,
             keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Number),
-            modifier = Modifier.fillMaxWidth()
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 16.dp, vertical = 16.dp)
         )
 
-        Spacer(modifier = Modifier.height(8.dp))
-
         // Dropdown for categories if the transaction type is expense
-        if (transactionType == "Despesa") {
+        if (transactionType == expenseString) {
             var expanded by remember { mutableStateOf(false) }
 
-            Box(modifier = Modifier.fillMaxWidth()) {
+            Box(modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp)) {
                 OutlinedTextField(
                     value = selectedCategory,
                     onValueChange = { selectedCategory = it },
-                    label = { Text("Categoria") },
+                    label = { Text(stringResource(id = R.string.category)) },
                     readOnly = true,
                     modifier = Modifier.fillMaxWidth()
-
                 )
                 Box(
                     modifier = Modifier

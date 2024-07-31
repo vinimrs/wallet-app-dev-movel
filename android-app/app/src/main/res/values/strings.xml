@@ -1,3 +1,31 @@
 <resources>
     <string name="app_name">WalletApp</string>
+    <string name="greeting">Olá</string>
+    <string name="balance">SALDO</string>
+    <string name="overview">Visão geral dos últimos registros</string>
+    <string name="new_transaction">Novo registro</string>
+    <string name="category">Categoria</string>
+    <string name="amount">Valor (R$)</string>
+    <string name="income">Receita</string>
+    <string name="expense">Despesa</string>
+    <string name="change_language">Mudar idioma</string>
+    <string name="back">Voltar</string>
+    <string name="email_icon">Ícone de Email</string>
+    <string name="welcome_back">Bem-vindo de volta!</string>
+    <string name="email">E-mail</string>
+    <string name="password">Senha</string>
+    <string name="no_account">Não possui cadastro?</string>
+    <string name="register">Fazer cadastro</string>
+    <string name="login">Logar</string>
+    <string name="user_icon">Ícone de Usuário</string>
+    <string name="name">Nome</string>
+    <string name="already_have_account">Já possui conta?</string>
+    <string name="market">Mercado</string>
+    <string name="health">Saúde</string>
+    <string name="leisure">Lazer</string>
+    <string name="bills">Contas</string>
+    <string name="cancel">Cancelar</string>
+    <string name="confirm">Confirmar</string>
+    <string name="yesterday">Ontem</string>
+    <!-- Adicione outras strings necessárias aqui -->
 </resources>
