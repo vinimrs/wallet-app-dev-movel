@@ -1,31 +1,41 @@
 package com.ufscar.dc.movel.walletapp.ui.compose
 
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
+import androidx.compose.material3.Button
+import androidx.compose.material3.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.dp
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ShoppingCart
 import androidx.compose.material3.*
-import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
-import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.ufscar.dc.movel.walletapp.R
 import com.ufscar.dc.movel.walletapp.ui.theme.WalletAppTheme
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
 import androidx.compose.ui.tooling.preview.Preview
+import java.text.NumberFormat
+import java.util.Locale
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MainScreen(
     viewModel: MainViewModel = viewModel(),
-    onNewTransactionClicked: () -> Unit = {}
+    onNewTransactionClicked: () -> Unit = {},
+    onLogoutClicked: () -> Unit = {}
 ) {
     Column(
         modifier = Modifier
@@ -33,6 +43,25 @@ fun MainScreen(
             .padding(16.dp)
     ) {
         Text(text = "${stringResource(id = R.string.greeting)}, ${viewModel.getUserName()}", fontSize = 16.sp, fontWeight = FontWeight.Bold)
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.SpaceBetween,
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Text(
+                text = "Olá, ${viewModel.userData.name}",
+                fontSize = 16.sp,
+                fontWeight = FontWeight.Bold
+            )
+            Button(
+                onClick = {
+                    viewModel.logout()
+                    onLogoutClicked()
+                },
+            ) {
+                Text(text = "Sair")
+            }
+        }
         Spacer(modifier = Modifier.height(16.dp))
 
         Text(
@@ -52,7 +81,7 @@ fun MainScreen(
 
             ) {
             Text(
-                text = "R$ 9999,99",
+                text = "R$ ${NumberFormat.getNumberInstance(Locale("pt", "BR")).format(viewModel.userData.planning.balance)}",
                 modifier = Modifier
                     .padding(16.dp)
                     .align(Alignment.CenterHorizontally),
@@ -70,12 +99,12 @@ fun MainScreen(
         LazyColumn(
             modifier = Modifier.weight(1f)
         ) {
-            items(5) { index ->
+            items(viewModel.userData.planning.transactions) { transaction ->
                 RecentItem(
-                    category = "${stringResource(id = R.string.category)} $index",
-                    amount = "-R$ ${index * 10},00",
-                    date = stringResource(id = R.string.yesterday),
-                    iconColor = if (index % 2 == 0) Color.Red else Color.Green
+                    category = "Categoria ${transaction.description}",
+                    amount = if (transaction.value < 0) "- R$ ${transaction.value + 2*(-transaction.value)}" else "+ R$ ${transaction.value}",
+                    date = transaction.date,
+                    iconColor = if (transaction.description == "Despesa") Color.Red else Color.Green
                 )
                 Spacer(modifier = Modifier.height(8.dp))
             }

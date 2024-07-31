@@ -22,6 +22,10 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.ufscar.dc.movel.walletapp.R
 import com.ufscar.dc.movel.walletapp.ui.theme.WalletAppTheme
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 @Composable
 fun LoginScreen(
@@ -79,8 +83,12 @@ fun LoginScreen(
         Button(
             colors = ButtonDefaults.buttonColors(greenColor),
             onClick = {
-                mainViewModel.login(email, password)
-                onLoginClicked()
+                CoroutineScope(Dispatchers.Main).launch {
+                    mainViewModel.login(email, password)
+                    delay(1000)
+                    if(mainViewModel.errorMessage.isEmpty())
+                        onLoginClicked()
+                }
             },
             modifier = Modifier
                 .fillMaxWidth()

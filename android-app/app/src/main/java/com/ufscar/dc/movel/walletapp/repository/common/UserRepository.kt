@@ -1,10 +1,12 @@
 package com.ufscar.dc.movel.walletapp.repository.common
 
+import com.ufscar.dc.movel.walletapp.repository.dto.LoginUserData
+import com.ufscar.dc.movel.walletapp.repository.dto.LoginUserResponse
 import com.ufscar.dc.movel.walletapp.repository.retrofit.UserInterface
 import com.ufscar.dc.movel.walletapp.repository.retrofit.RetrofitInstance
 
 class UserRepository(
-    private val test: Boolean = false
+    private val test: Boolean = true
 ) {
     private lateinit var client: UserInterface
 
@@ -15,11 +17,11 @@ class UserRepository(
             client = RetrofitInstance.api
     }
 
-    suspend fun getUsers(): List<User> = client.getUsers()
 
-    suspend fun addUser(board: User) = client.addUser(board)
+    suspend fun addUser(user: User): LoginUserResponse = client.addUser(user)
 
     suspend fun deleteUser(id: Long) = client.deleteUser(id)
 
-    suspend fun login(email: String, password: String): GeneralResponse = client.login(email, password)
+    suspend fun login(email: String, password: String): LoginUserResponse = client.login(LoginUserData(email, password))
+
 }

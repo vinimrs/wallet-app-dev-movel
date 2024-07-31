@@ -2,6 +2,8 @@ package com.ufscar.dc.movel.walletapp.repository.retrofit
 
 import com.ufscar.dc.movel.walletapp.repository.common.GeneralResponse
 import com.ufscar.dc.movel.walletapp.repository.common.User
+import com.ufscar.dc.movel.walletapp.repository.dto.LoginUserData
+import com.ufscar.dc.movel.walletapp.repository.dto.LoginUserResponse
 import retrofit2.http.Body
 import retrofit2.http.DELETE
 import retrofit2.http.GET
@@ -15,10 +17,10 @@ interface UserInterface {
     suspend fun getUsers() : List<User>
 
     @POST("users")
-    suspend fun addUser(@Body user: User): User
+    suspend fun addUser(@Body user: User): LoginUserResponse
 
-    @GET("login")
-    suspend fun login(@Body email: String, @Body password: String): GeneralResponse
+    @POST("login")
+    suspend fun login(@Body loginUserData: LoginUserData): LoginUserResponse
 
     @GET("users/{id}")
     suspend fun getUser(@Path("id") id: Long): User

@@ -18,77 +18,50 @@ app.get("/reset", async (req, res) => {
   res.json({ message: "users reset" });
 });
 
-app.get("/login", async (req, res) => {
+app.post("/login", async (req, res) => {
   console.log("login");
-  const email = req.query.email;
-  const password = req.query.password;
+  const { email, password } = req.body;
   for (b of users) {
+    console.log(b.email + " " + b.password);
+    console.log(email + " " + password);
     if (b.email === email && b.password === password) {
+      console.log("login success" + b);
       res.status(200).json({
         success: true,
         message: "login success",
+        user: b,
       });
       return;
     }
   }
 
-  res.status(404).send("users not found");
-});
+  console.log("Usuário não existe ou senha inválida");
 
-app.get("/users", async (req, res) => {
-  console.log("get users");
-  res.json(users);
-});
-
-app.get("/users/:id", async (req, res) => {
-  const id = parseInt(req.params.id);
-  console.log("get users " + id);
-  for (b of users) {
-    if (b.id === id) {
-      res.json(b);
-      return;
-    }
-  }
-
-  res.status(404).send("users not found");
-});
-
-app.get("/users/:id/messages", async (req, res) => {
-  const id = parseInt(req.params.id);
-  console.log(`get users ${id} messages`);
-  bb = findusers(users, id);
-  if (bb != null) {
-    res.json(bb.messages);
-    return;
-  }
-
-  res.status(404).send("users not found");
+  res.status(404).json({
+    success: false,
+    message: "Usuário não existe ou senha inválida",
+  });
 });
 
 app.post("/users", async (req, res) => {
   const user = req.body;
   console.log("post users: " + user);
   if (findusers(users, user.id) != null) {
-    res.status(400).send("user already exists");
+    console.log("user already exists");
+    res.status(400).json({
+      success: false,
+      message: "user already exists",
+      user: null,
+    });
     return;
   }
+  console.log("user added");
   users.push(user);
-  res.status(204).json(user);
-});
-
-app.post("/users/:iid/messages", async (req, res) => {
-  const iid = parseInt(req.params.iid);
-  console.log(`post message to users ${iid}`);
-  bb = findusers(users, iid);
-  if (bb != null) {
-    const msg = req.body;
-    msg.timestamp = new Date().toString();
-    bb.messages.push(msg);
-    res.json({ message: "Message added to users " + bb.name });
-    return;
-  }
-
-  res.status(404).send("users not found");
+  res.status(200).json({
+    success: true,
+    message: "user added",
+    user: user,
+  });
 });
 
 app.listen(port, () => {
@@ -105,26 +78,25 @@ function findusers(users, iid) {
 }
 
 function initUsers() {
-  return [
+  const u = [
     {
       id: 1,
       name: "João da Silva",
-      email: "joao@email.com",
-      password: "12345678",
+      email: "joao",
+      password: "12",
       planning: {
-        initBalance: 5000,
-        balance: 4200.21,
+        initBalance: 0,
         transactions: [
           {
             id: 1,
-            date: "2021-05-01",
+            date: "01/05/2021",
             description: "Salário",
             value: 5000,
           },
           {
             id: 2,
-            date: "2021-05-02",
-            description: "Aluguel",
+            date: "02/05/2021",
+            description: "Despesa",
             value: -800,
           },
         ],
@@ -137,22 +109,33 @@ function initUsers() {
       password: "12345678",
       planning: {
         initBalance: 0,
-        balance: -1000,
         transactions: [
           {
             id: 1,
-            date: "2021-05-01",
+            date: "01/05/2021",
             description: "Salário",
             value: 2000,
           },
           {
             id: 2,
-            date: "2021-05-02",
-            description: "Aluguel",
+            date: "02/05/2021",
+            description: "Despesa",
             value: -300,
           },
         ],
       },
     },
   ];
+
+  return u.map((b) => {
+    return {
+      ...b,
+      planning: {
+        ...b.planning,
+        balance:
+          b.planning.initBalance +
+          b.planning.transactions.reduce((acc, t) => acc + t.value, 0),
+      },
+    };
+  });
 }

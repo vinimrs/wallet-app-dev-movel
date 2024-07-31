@@ -11,7 +11,7 @@ import com.ufscar.dc.movel.walletapp.repository.common.UserRepository
 import kotlinx.coroutines.launch
 
 class MainViewModel : ViewModel() {
-    private val repository = UserRepository()
+    private val repository = UserRepository(test = false)
 
     var email by mutableStateOf("")
     var password by mutableStateOf("")
@@ -20,27 +20,33 @@ class MainViewModel : ViewModel() {
     var transactionType by mutableStateOf("")
     var selectedCategory by mutableStateOf("")
 
-    var numberOfBoardsMsg by mutableStateOf("")
-    var users = mutableStateListOf<User>()
+    var userData: User by mutableStateOf(User())
     var showNetworkErrorSnackBar by mutableStateOf(false)
 
     var msg_boardID by mutableStateOf("")
     var msg_boardIdError by mutableStateOf(false)
-    var errorMessage = ""
+    var errorMessage by mutableStateOf("")
 
     fun login(email1: String, password1: String) {
         viewModelScope.launch {
             email = email1
             password = password1
-//            repository.login(email, password)
-        }
-    }
-
-    fun logout() {
-        viewModelScope.launch {
-            email = ""
-            password = ""
-//            repository.logout()
+            try {
+                val response = repository.login(email1, password1)
+                if(response.success) {
+                    showNetworkErrorSnackBar = false
+                    errorMessage = ""
+                    userData = response.user
+                } else {
+                    errorMessage = response.message
+                    showNetworkErrorSnackBar = true
+                }
+            } catch (e: Exception) {
+                errorMessage = e.message ?: "Unknown error"
+                showNetworkErrorSnackBar = true
+                if(e.message!!.contains("404"))
+                    errorMessage = "E-mail ou senha inválidos"
+            }
         }
     }
 
@@ -49,7 +55,29 @@ class MainViewModel : ViewModel() {
             email = email1
             password = password1
             name = name1
-//            repository.register(username, password)
+            try {
+                val response = repository.addUser(User(name = name1, email = email1, password = password1))
+                if(response.success) {
+                    showNetworkErrorSnackBar = false
+                    errorMessage = ""
+                    userData = response.user
+                } else {
+                    errorMessage = response.message
+                    showNetworkErrorSnackBar = true
+                }
+            } catch (e: Exception) {
+                errorMessage = e.message ?: "Unknown error"
+                showNetworkErrorSnackBar = true
+                if(e.message!!.contains("400"))
+                    errorMessage = "Usuário já existe"
+            }
+        }
+    }
+
+    fun logout() {
+        viewModelScope.launch {
+            userData = User()
+//            repository.logout()
         }
     }
 
@@ -68,13 +96,6 @@ class MainViewModel : ViewModel() {
 
     fun dismissNetworkErrorSnackBar() {
         showNetworkErrorSnackBar = false
-    }
-
-    fun updateMsg_boardID(s: String) {
-        msg_boardID = s
-        if (msg_boardID == "")
-            return
-        validateBoardId()
     }
 
     private fun validateBoardId(): Boolean {

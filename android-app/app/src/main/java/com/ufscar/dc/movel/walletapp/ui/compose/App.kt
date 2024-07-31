@@ -35,8 +35,11 @@ fun App(
     Scaffold(
         topBar = {
             AppBar(
-                canNavigateBack = backStackEntry?.destination?.route != "Login",
-                navigateUp = { navController.navigateUp() }
+                canNavigateBack = backStackEntry?.destination?.route != "Login" &&
+                        backStackEntry?.destination?.route != "Register" &&
+                        backStackEntry?.destination?.route != "Main",
+                navigateUp = {
+                    navController.navigateUp() }
             )
         },
         snackbarHost = {
@@ -53,7 +56,9 @@ fun App(
             composable("Login") {
                 LoginScreen(
                     mainViewModel,
-                    onLoginClicked = { navController.navigate("Main") },
+                    onLoginClicked = {
+                        if(mainViewModel.errorMessage.isEmpty())
+                            navController.navigate("Main") },
                     onRegisterButtonClicked = { navController.navigate("Register")}
                 )
             }
@@ -77,17 +82,10 @@ fun App(
             composable("Main") {
                 MainScreen(
                     mainViewModel,
-                    onNewTransactionClicked = { navController.navigate("Transaction") }
+                    onNewTransactionClicked = { navController.navigate("Transaction") },
+                    onLogoutClicked = { navController.navigate("Login") }
                 )
             }
-//            composable("Initial") {
-//                InitialScreen(
-//                    mainViewModel,
-//                    onBoardMessagesClicked = { navController.navigate("BoardMessages") },
-//                    onPostMessageClicked = { navController.navigate("PostMessage") },
-//                    onDeleteBoardClicked = { navController.navigate("DeleteBoard") }
-//                )
-//            }
         }
     }
 
@@ -95,6 +93,7 @@ fun App(
         LaunchedEffect(mainViewModel.showNetworkErrorSnackBar) {
             scope.launch {
                 val result = snackbarHostState.showSnackbar(
+                    mainViewModel.errorMessage ?:
                     "Network error. Try again later!",
                     actionLabel = "OK"
                 )

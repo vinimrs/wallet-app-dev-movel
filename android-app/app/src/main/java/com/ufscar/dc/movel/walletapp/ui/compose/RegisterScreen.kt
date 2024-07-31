@@ -22,6 +22,10 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.ufscar.dc.movel.walletapp.R
 import com.ufscar.dc.movel.walletapp.ui.theme.WalletAppTheme
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 @Composable
 fun RegisterScreen(
@@ -86,8 +90,12 @@ fun RegisterScreen(
         Button(
             colors = ButtonDefaults.buttonColors(greenColor),
             onClick = {
-                mainViewModel.register(name, email, password)
-                onRegisterClicked()
+                CoroutineScope(Dispatchers.Main).launch {
+                    mainViewModel.register(name, email, password)
+                    delay(1000)
+                    if(mainViewModel.errorMessage.isEmpty())
+                        onRegisterClicked()
+                }
             },
             modifier = Modifier
                 .fillMaxWidth()
