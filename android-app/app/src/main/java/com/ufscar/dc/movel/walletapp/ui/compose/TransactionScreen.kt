@@ -37,7 +37,7 @@ fun TransactionScreen(
     val greenColor = Color(0xFF01AA71)
     val incomeString = stringResource(id = R.string.income)
     val expenseString = stringResource(id = R.string.expense)
-    var selectedCategory by remember { mutableStateOf(expenseString) }
+    var selectedCategory by remember { mutableStateOf(incomeString) }
     var transactionType by remember { mutableStateOf(incomeString) }
     val categories = listOf(
         stringResource(id = R.string.market),
@@ -75,7 +75,8 @@ fun TransactionScreen(
                 )
                 IconButton(onClick = {
                     CoroutineScope(Dispatchers.Main).launch {
-                        mainViewModel.addTransaction(transactionType, amount.toDoubleOrNull() ?: 0.0, selectedCategory, description)
+                        mainViewModel.addTransaction(transactionType, amount.toDoubleOrNull() ?: 0.0,
+                            selectedCategory, description, transactionType == incomeString)
                         delay(1000)
                         if(mainViewModel.errorMessage.isEmpty())
                             onTransactionConfirmedClicked()
@@ -94,7 +95,9 @@ fun TransactionScreen(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceEvenly
             ) {
-                TextButton(onClick = { transactionType = incomeString }) {
+                TextButton(onClick = { transactionType = incomeString
+                    selectedCategory = incomeString
+                }) {
                     Text(
                         text = incomeString,
                         fontSize = 18.sp,

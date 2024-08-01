@@ -19,12 +19,6 @@ class MainViewModel : ViewModel() {
     var email by mutableStateOf("")
     var password by mutableStateOf("")
     var name by mutableStateOf("")
-    var amount by mutableStateOf(0.0)
-    var transactionType by mutableStateOf("")
-    var selectedCategory by mutableStateOf("")
-
-    val incomeString = R.string.income.toString()
-    val expenseString = R.string.expense.toString()
 
     var userData: User by mutableStateOf(User())
     var showNetworkErrorSnackBar by mutableStateOf(false)
@@ -91,10 +85,10 @@ class MainViewModel : ViewModel() {
         return email
     }
 
-    fun addTransaction (transactionType1: String, amount1: Double, selectedCategory1: String, description: String){
+    fun addTransaction (transactionType1: String, amount1: Double, selectedCategory1: String, description: String, income: Boolean){
         viewModelScope.launch {
             try {
-                val response = repository.addTransaction(Transaction(value = if (transactionType1 == incomeString) amount1 else -amount1,
+                val response = repository.addTransaction(Transaction(value = if (income) amount1 else -amount1,
                     description = description,
                     category = selectedCategory1), userData.id)
                 if(response.success) {

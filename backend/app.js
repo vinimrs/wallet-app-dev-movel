@@ -87,6 +87,7 @@ app.post("/users/:id/transactions", async (req, res) => {
     expense: transaction.value < 0,
   });
   user.planning.balance += transaction.value;
+  console.log("Adding transaction on user" + transaction.value);
 
   res.status(200).json({
     success: true,
