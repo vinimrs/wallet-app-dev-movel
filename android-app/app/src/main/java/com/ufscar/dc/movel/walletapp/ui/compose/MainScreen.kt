@@ -29,18 +29,21 @@ fun MainScreen(
     onNewTransactionClicked: () -> Unit = {},
     onLogoutClicked: () -> Unit = {}
 ) {
+    val moeda = stringResource(id = R.string.coin)
     Column(
         modifier = Modifier
             .fillMaxSize()
             .padding(16.dp)
     ) {
-        Text(text = "${stringResource(id = R.string.greeting)}, ${viewModel.getUserName()}", fontSize = 16.sp, fontWeight = FontWeight.Bold)
+
         Row(
             modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.CenterVertically
         ) {
+            Text(text = "${stringResource(id = R.string.greeting)}, ${viewModel.getUserName()}", fontSize = 16.sp, fontWeight = FontWeight.Bold)
             Button(
+                colors = ButtonDefaults.buttonColors(Color(0xFF01AA71)),
                 onClick = {
                     viewModel.logout()
                     onLogoutClicked()
@@ -67,7 +70,7 @@ fun MainScreen(
             ),
         ) {
             Text(
-                text = "R$ ${NumberFormat.getNumberInstance(Locale("pt", "BR")).format(viewModel.userData.planning.balance)}",
+                text = "${moeda} ${NumberFormat.getNumberInstance(Locale("pt", "BR")).format(viewModel.userData.planning.balance)}",
                 modifier = Modifier
                     .padding(16.dp)
                     .align(Alignment.CenterHorizontally),
@@ -88,8 +91,8 @@ fun MainScreen(
             items(viewModel.userData.planning.transactions) { transaction ->
                 RecentItem(
                     category = transaction.category + " - " + transaction.description,
-                    amount = if (transaction.value < 0) "- R$ ${NumberFormat.getNumberInstance(Locale("pt", "BR")).format(transaction.value + 2*(-transaction.value))}"
-                    else "+ R$ ${NumberFormat.getNumberInstance(Locale("pt", "BR")).format(transaction.value)}",
+                    amount = if (transaction.value < 0) "- ${moeda} ${NumberFormat.getNumberInstance(Locale("pt", "BR")).format(transaction.value + 2*(-transaction.value))}"
+                    else "+ ${moeda} ${NumberFormat.getNumberInstance(Locale("pt", "BR")).format(transaction.value)}",
                     date = transaction.date,
                     iconColor = if (transaction.expense) Color.Red else Color.Green
                 )
