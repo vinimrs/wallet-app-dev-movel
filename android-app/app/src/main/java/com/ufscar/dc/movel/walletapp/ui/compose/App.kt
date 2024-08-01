@@ -6,11 +6,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.SnackbarResult
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -24,7 +20,8 @@ import kotlinx.coroutines.launch
 
 @Composable
 fun App(
-    navController: NavHostController = rememberNavController()
+    navController: NavHostController = rememberNavController(),
+    sharedViewModel: SharedViewModel = viewModel()
 ) {
     // Get current back stack entry
     val backStackEntry by navController.currentBackStackEntryAsState()
@@ -39,7 +36,8 @@ fun App(
                         backStackEntry?.destination?.route != "Register" &&
                         backStackEntry?.destination?.route != "Main",
                 navigateUp = {
-                    navController.navigateUp() }
+                    navController.navigateUp() },
+                sharedViewModel = sharedViewModel
             )
         },
         snackbarHost = {

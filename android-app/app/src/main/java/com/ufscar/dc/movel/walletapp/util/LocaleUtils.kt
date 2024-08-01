@@ -1,6 +1,7 @@
 package com.ufscar.dc.movel.walletapp.util
 
 import android.content.Context
+import android.content.Intent
 import android.content.res.Configuration
 import android.os.Build
 import androidx.annotation.RequiresApi
@@ -13,20 +14,17 @@ object LocaleUtils {
         Locale.setDefault(locale)
         val config = Configuration(context.resources.configuration)
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-            setLocaleForNougat(config, locale)
+            config.setLocale(locale)
+            context.createConfigurationContext(config)
         } else {
-            setLocaleForPreNougat(config, locale)
+            config.locale = locale
+            context.resources.updateConfiguration(config, context.resources.displayMetrics)
         }
-        context.createConfigurationContext(config)
     }
 
-    @RequiresApi(Build.VERSION_CODES.N)
-    private fun setLocaleForNougat(config: Configuration, locale: Locale) {
-        config.setLocale(locale)
-    }
-
-    @Suppress("DEPRECATION")
-    private fun setLocaleForPreNougat(config: Configuration, locale: Locale) {
-        config.locale = locale
+    fun restartActivity(context: Context) {
+        val intent = Intent(context, context::class.java)
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK)
+        context.startActivity(intent)
     }
 }

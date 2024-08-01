@@ -28,5 +28,6 @@
     <string name="confirm">Confirmar</string>
     <string name="yesterday">Ontem</string>
     <string name="description">Descrição</string>
-    <!-- Adicione outras strings necessárias aqui -->
+    <string name="logout">Logout</string>
+
 </resources>

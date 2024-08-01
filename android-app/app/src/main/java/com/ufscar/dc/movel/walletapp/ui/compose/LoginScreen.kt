@@ -5,11 +5,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Email
 import androidx.compose.material3.*
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -45,7 +41,7 @@ fun LoginScreen(
         verticalArrangement = Arrangement.Center
     ) {
         Icon(
-            imageVector = Icons.Default.Email, // Altere para o ícone desejado
+            imageVector = Icons.Default.Email,
             contentDescription = stringResource(id = R.string.email_icon),
             modifier = Modifier.size(64.dp),
             tint = greenColor
@@ -53,7 +49,6 @@ fun LoginScreen(
         Spacer(modifier = Modifier.height(16.dp))
         Text(text = stringResource(id = R.string.welcome_back), fontSize = 32.sp)
         Spacer(modifier = Modifier.height(16.dp))
-        // required field
         OutlinedTextField(
             value = email,
             onValueChange = { email = it },

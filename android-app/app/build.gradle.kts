@@ -63,6 +63,15 @@ dependencies {
     implementation("androidx.compose.foundation:foundation:1.0.5")
     implementation("androidx.compose.material:material:1.0.5")
     implementation("androidx.compose.material3:material3:1.0.0-alpha12")
+    implementation("org.jetbrains.kotlinx", "kotlinx-coroutines-core", "1.5.2")
+    implementation("androidx.lifecycle:lifecycle-runtime-compose:2.6.2")
+    implementation("androidx.core:core-ktx:1.6.0")
+    implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.3.1")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.5.1")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.5.1")
+    implementation("androidx.compose.ui:ui:1.0.1")
+    implementation("androidx.compose.material3:material3:1.0.0-alpha01")
+    implementation("androidx.navigation:navigation-compose:2.4.0-alpha08")
 
     // Retrofit
     implementation("com.squareup.retrofit2:retrofit:2.9.0")

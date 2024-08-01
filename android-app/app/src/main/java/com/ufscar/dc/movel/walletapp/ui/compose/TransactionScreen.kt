@@ -51,7 +51,6 @@ fun TransactionScreen(
             .fillMaxSize(),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        // Header and SubHeader combined with green background
         Column(
             modifier = Modifier
                 .fillMaxWidth()
@@ -62,7 +61,7 @@ fun TransactionScreen(
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(horizontal = 0.dp),  // Remover padding horizontal
+                    .padding(horizontal = 0.dp),
                 horizontalArrangement = Arrangement.SpaceBetween,
                 verticalAlignment = Alignment.CenterVertically
             ) {
@@ -77,7 +76,6 @@ fun TransactionScreen(
                 IconButton(onClick = {
                     CoroutineScope(Dispatchers.Main).launch {
                         mainViewModel.addTransaction(transactionType, amount.toDoubleOrNull() ?: 0.0, selectedCategory, description)
-
                         delay(1000)
                         if(mainViewModel.errorMessage.isEmpty())
                             onTransactionConfirmedClicked()
@@ -125,7 +123,6 @@ fun TransactionScreen(
                 .fillMaxWidth()
                 .padding(horizontal = 16.dp, vertical = 16.dp)
         )
-        // Numeric field for amount
         OutlinedTextField(
             value = amount,
             onValueChange = { amount = it },
@@ -137,9 +134,6 @@ fun TransactionScreen(
                 .padding(horizontal = 16.dp, vertical = 16.dp)
         )
 
-
-
-        // Dropdown for categories if the transaction type is expense
         if (transactionType == expenseString) {
             var expanded by remember { mutableStateOf(false) }
 
@@ -157,7 +151,7 @@ fun TransactionScreen(
                     modifier = Modifier
                         .matchParentSize()
                         .clickable { expanded = true }
-                ) // Caixa transparente que detecta cliques
+                )
                 DropdownMenu(
                     expanded = expanded,
                     onDismissRequest = { expanded = false },
