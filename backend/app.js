@@ -64,6 +64,37 @@ app.post("/users", async (req, res) => {
   });
 });
 
+app.post("/users/:id/transactions", async (req, res) => {
+  const user = findusers(users, parseInt(req.params.id));
+  console.log("post users transactions: " + user.id + " " + req.params.id);
+  if (user == null) {
+    res.status(404).json({
+      success: false,
+      message: "user not found",
+      user: null,
+    });
+    return;
+  }
+
+  const transaction = req.body;
+  transaction.id = user.planning.transactions.length + 1;
+  user.planning.transactions.push({
+    id: transaction.id,
+    date: transaction.date,
+    description: transaction.description,
+    category: transaction.category,
+    value: transaction.value,
+    expense: transaction.value < 0,
+  });
+  user.planning.balance += transaction.value;
+
+  res.status(200).json({
+    success: true,
+    message: "transaction added",
+    user: user,
+  });
+});
+
 app.listen(port, () => {
   console.log("started server...");
 });
@@ -91,13 +122,17 @@ function initUsers() {
             id: 1,
             date: "01/05/2021",
             description: "Salário",
+            category: "Salário",
             value: 5000,
+            expense: false,
           },
           {
             id: 2,
             date: "02/05/2021",
             description: "Despesa",
+            category: "Alimentação",
             value: -800,
+            expense: true,
           },
         ],
       },
@@ -114,13 +149,17 @@ function initUsers() {
             id: 1,
             date: "01/05/2021",
             description: "Salário",
+            category: "Salário",
             value: 2000,
+            expense: false,
           },
           {
             id: 2,
             date: "02/05/2021",
             description: "Despesa",
+            category: "Alimentação",
             value: -300,
+            expense: true,
           },
         ],
       },

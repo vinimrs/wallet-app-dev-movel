@@ -101,10 +101,11 @@ fun MainScreen(
         ) {
             items(viewModel.userData.planning.transactions) { transaction ->
                 RecentItem(
-                    category = "Categoria ${transaction.description}",
-                    amount = if (transaction.value < 0) "- R$ ${transaction.value + 2*(-transaction.value)}" else "+ R$ ${transaction.value}",
+                    category = transaction.category + " - " + transaction.description,
+                    amount = if (transaction.value < 0) "- R$ ${NumberFormat.getNumberInstance(Locale("pt", "BR")).format(transaction.value + 2*(-transaction.value))}"
+                            else "+ R$ ${NumberFormat.getNumberInstance(Locale("pt", "BR")).format(transaction.value)}",
                     date = transaction.date,
-                    iconColor = if (transaction.description == "Despesa") Color.Red else Color.Green
+                    iconColor = if (transaction.expense) Color.Red else Color.Green
                 )
                 Spacer(modifier = Modifier.height(8.dp))
             }
@@ -144,7 +145,8 @@ fun RecentItem(category: String, amount: String, date: String, iconColor: Color)
             Text(text = date, color = Color.Gray)
         }
         Spacer(modifier = Modifier.weight(1f))
-        Text(text = amount, color = if (amount.startsWith("-")) Color.Red else Color.Green)
+        Text(text = amount,
+            color = if (amount.startsWith("-")) Color.Red else Color.Green)
     }
 }
 

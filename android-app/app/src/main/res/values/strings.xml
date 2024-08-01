@@ -27,5 +27,6 @@
     <string name="cancel">Cancelar</string>
     <string name="confirm">Confirmar</string>
     <string name="yesterday">Ontem</string>
+    <string name="description">Descrição</string>
     <!-- Adicione outras strings necessárias aqui -->
 </resources>

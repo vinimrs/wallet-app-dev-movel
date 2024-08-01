@@ -21,6 +21,10 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.ufscar.dc.movel.walletapp.R
 import com.ufscar.dc.movel.walletapp.ui.theme.WalletAppTheme
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 @Composable
 fun TransactionScreen(
@@ -28,12 +32,13 @@ fun TransactionScreen(
     onTransactionConfirmedClicked: () -> Unit = {},
     onTransactionCancelledClicked: () -> Unit = {}
 ) {
-    var transactionType by remember { mutableStateOf("Receita") }
     var amount by remember { mutableStateOf("") }
-    var selectedCategory by remember { mutableStateOf("") }
+    var description by remember { mutableStateOf("") }
     val greenColor = Color(0xFF01AA71)
     val incomeString = stringResource(id = R.string.income)
     val expenseString = stringResource(id = R.string.expense)
+    var selectedCategory by remember { mutableStateOf(expenseString) }
+    var transactionType by remember { mutableStateOf(incomeString) }
     val categories = listOf(
         stringResource(id = R.string.market),
         stringResource(id = R.string.health),
@@ -64,9 +69,20 @@ fun TransactionScreen(
                 IconButton(onClick = onTransactionCancelledClicked) {
                     Icon(imageVector = Icons.Default.Close, contentDescription = stringResource(id = R.string.cancel), tint = Color.White)
                 }
+                Text(
+                    text = stringResource(id = R.string.new_transaction),
+                    fontSize = 24.sp,
+                    color = Color.White
+                )
                 IconButton(onClick = {
-                    mainViewModel.addTransaction(transactionType, amount.toDoubleOrNull() ?: 0.0, selectedCategory)
-                    onTransactionConfirmedClicked()
+                    CoroutineScope(Dispatchers.Main).launch {
+                        mainViewModel.addTransaction(transactionType, amount.toDoubleOrNull() ?: 0.0, selectedCategory, description)
+
+                        delay(1000)
+                        if(mainViewModel.errorMessage.isEmpty())
+                            onTransactionConfirmedClicked()
+                    }
+
                 }) {
                     Icon(imageVector = Icons.Default.Check, contentDescription = stringResource(id = R.string.confirm), tint = Color.White)
                 }
@@ -87,7 +103,9 @@ fun TransactionScreen(
                         color = if (transactionType == incomeString) Color.White else Color.Black
                     )
                 }
-                TextButton(onClick = { transactionType = expenseString }) {
+                TextButton(onClick = { transactionType = expenseString
+                    selectedCategory = ""
+                }) {
                     Text(
                         text = expenseString,
                         fontSize = 18.sp,
@@ -97,23 +115,37 @@ fun TransactionScreen(
             }
         }
 
+        OutlinedTextField(
+            value = description,
+            onValueChange = { description = it },
+            label = { Text(stringResource(id = R.string.description)) },
+            singleLine = true,
+            keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Text),
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 16.dp, vertical = 16.dp)
+        )
         // Numeric field for amount
         OutlinedTextField(
             value = amount,
             onValueChange = { amount = it },
             label = { Text(stringResource(id = R.string.amount)) },
             singleLine = true,
-            keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Number),
+            keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Decimal),
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(horizontal = 16.dp, vertical = 16.dp)
         )
 
+
+
         // Dropdown for categories if the transaction type is expense
         if (transactionType == expenseString) {
             var expanded by remember { mutableStateOf(false) }
 
-            Box(modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp)) {
+            Box(modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 16.dp)) {
                 OutlinedTextField(
                     value = selectedCategory,
                     onValueChange = { selectedCategory = it },
@@ -141,6 +173,18 @@ fun TransactionScreen(
                         )
                     }
                 }
+            }
+        } else {
+            Box(modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 16.dp)) {
+                OutlinedTextField(
+                    value = incomeString,
+                    onValueChange = { selectedCategory = it },
+                    label = { Text(stringResource(id = R.string.category)) },
+                    readOnly = true,
+                    modifier = Modifier.fillMaxWidth()
+                )
             }
         }
     }

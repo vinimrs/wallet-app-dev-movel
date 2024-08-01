@@ -20,8 +20,7 @@ class UserRepository(
 
     suspend fun addUser(user: User): LoginUserResponse = client.addUser(user)
 
-    suspend fun deleteUser(id: Long) = client.deleteUser(id)
-
     suspend fun login(email: String, password: String): LoginUserResponse = client.login(LoginUserData(email, password))
 
+    suspend fun addTransaction(transaction: Transaction, userId: Int): LoginUserResponse = client.addTransaction(transaction, userId)
 }

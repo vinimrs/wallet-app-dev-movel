@@ -1,6 +1,7 @@
 package com.ufscar.dc.movel.walletapp.repository.retrofit
 
 import com.ufscar.dc.movel.walletapp.repository.common.GeneralResponse
+import com.ufscar.dc.movel.walletapp.repository.common.Transaction
 import com.ufscar.dc.movel.walletapp.repository.common.User
 import com.ufscar.dc.movel.walletapp.repository.dto.LoginUserData
 import com.ufscar.dc.movel.walletapp.repository.dto.LoginUserResponse
@@ -31,5 +32,8 @@ interface UserInterface {
     // only for testing
     @GET("reset")
     suspend fun reset(): GeneralResponse
+
+    @POST("users/{id}/transactions")
+    suspend fun addTransaction(@Body transaction: Transaction, @Path("id") id: Int): LoginUserResponse
 
 }
