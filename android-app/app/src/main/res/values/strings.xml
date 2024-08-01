@@ -29,5 +29,5 @@
     <string name="yesterday">Ontem</string>
     <string name="description">Descrição</string>
     <string name="logout">Logout</string>
-
+    <string name="coin">R$</string>
 </resources>

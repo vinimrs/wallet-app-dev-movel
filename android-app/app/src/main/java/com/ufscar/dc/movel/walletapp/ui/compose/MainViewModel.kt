@@ -82,7 +82,7 @@ class MainViewModel : ViewModel() {
     }
 
     fun getUserName(): String {
-        return email
+        return userData.name
     }
 
     fun addTransaction (transactionType1: String, amount1: Double, selectedCategory1: String, description: String, income: Boolean){
