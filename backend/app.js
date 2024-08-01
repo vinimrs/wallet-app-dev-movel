@@ -5,7 +5,6 @@ const cors = require("cors");
 const app = express();
 const port = 3000;
 
-// initial data
 let users = initUsers();
 
 app.use(cors());
@@ -19,11 +18,8 @@ app.get("/reset", async (req, res) => {
 });
 
 app.post("/login", async (req, res) => {
-  console.log("login");
   const { email, password } = req.body;
   for (b of users) {
-    console.log(b.email + " " + b.password);
-    console.log(email + " " + password);
     if (b.email === email && b.password === password) {
       console.log("login success" + b);
       res.status(200).json({
@@ -35,8 +31,6 @@ app.post("/login", async (req, res) => {
     }
   }
 
-  console.log("Usuário não existe ou senha inválida");
-
   res.status(404).json({
     success: false,
     message: "Usuário não existe ou senha inválida",
@@ -45,7 +39,6 @@ app.post("/login", async (req, res) => {
 
 app.post("/users", async (req, res) => {
   const user = req.body;
-  console.log("post users: " + user);
   if (findusers(users, user.id) != null) {
     console.log("user already exists");
     res.status(400).json({
@@ -55,7 +48,6 @@ app.post("/users", async (req, res) => {
     });
     return;
   }
-  console.log("user added");
   users.push(user);
   res.status(200).json({
     success: true,
@@ -66,7 +58,6 @@ app.post("/users", async (req, res) => {
 
 app.post("/users/:id/transactions", async (req, res) => {
   const user = findusers(users, parseInt(req.params.id));
-  console.log("post users transactions: " + user.id + " " + req.params.id);
   if (user == null) {
     res.status(404).json({
       success: false,
@@ -87,7 +78,6 @@ app.post("/users/:id/transactions", async (req, res) => {
     expense: transaction.value < 0,
   });
   user.planning.balance += transaction.value;
-  console.log("Adding transaction on user" + transaction.value);
 
   res.status(200).json({
     success: true,
