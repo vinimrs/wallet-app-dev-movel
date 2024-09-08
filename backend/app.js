@@ -38,6 +38,23 @@ app.post("/login", async (req, res) => {
   });
 });
 
+app.get("/users/:id", async (req, res) => {
+  const user = findusers(users, parseInt(req.params.id));
+  if (user == null) {
+    res.status(404).json({
+      success: false,
+      message: "user not found",
+      data: null,
+    });
+    return;
+  }
+  res.status(200).json({
+    success: true,
+    message: "user found",
+    data: user,
+  });
+});
+
 app.post("/users", async (req, res) => {
   const user = req.body;
   if (findusers(users, user.id) != null) {
