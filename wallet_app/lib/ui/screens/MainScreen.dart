@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
+import 'package:wallet_app/repository/dto/planning.dart';
+import 'package:wallet_app/repository/dto/user.dart';
+import 'package:wallet_app/shared_preferences/user_local_storage.dart';
 import 'package:wallet_app/ui/screens/main_view_model.dart';
 
 class MainScreen extends StatefulWidget {
@@ -34,11 +37,32 @@ class Transaction {
 
 
 class _MainScreenState extends State<MainScreen> {
+  UserLocalStorage repository = UserLocalStorage();
+  User _user = User(
+    planning: Planning(),
+  );
+
+  @override
+  void initState() {
+    super.initState();
+    initializeState();
+
+  }
+
+  Future<void> initializeState() async {
+    User userStored = await repository.getUser();
+    if (userStored.name != "") {
+      setState(() {
+        _user = userStored;
+      });
+    }
+
+  }
 
   @override
   Widget build(BuildContext context) {
     final viewModel = Provider.of<MainViewModel>(context, listen: true);
-    final user = viewModel.userData;
+    final user = viewModel.userData ?? _user;
     final transactions = user.transactions;
     final balance = user.balance;
     final moeda = "R\$";
@@ -61,7 +85,7 @@ class _MainScreenState extends State<MainScreen> {
                     backgroundColor: Color(0xFF01AA71),
                   ),
                   onPressed: () {
-
+                    viewModel.logout();
                     Navigator.pushNamed(context, 'login');
                   },
                   child: Text("Logout"),

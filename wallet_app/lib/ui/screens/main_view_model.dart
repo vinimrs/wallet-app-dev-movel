@@ -7,9 +7,11 @@ import 'package:wallet_app/repository/dto/planning.dart';
 import 'package:wallet_app/repository/dto/transaction.dart';
 import 'package:wallet_app/repository/dto/user.dart';
 import 'package:wallet_app/repository/user_repository.dart';
+import 'package:wallet_app/shared_preferences/user_local_storage.dart';
 
 class MainViewModel extends ChangeNotifier {
   final UserRepository userRepository = UserRepository();
+  final UserLocalStorage userLocalStorage = UserLocalStorage();
 
   User _userData = User(
    planning: Planning()
@@ -22,11 +24,16 @@ class MainViewModel extends ChangeNotifier {
   get showNetworkErrorSnackBar => _showNetworkErrorSnackBar;
   get errorMessage => _errorMessage;
 
+  void setUserData(User user) {
+    _userData = user;
+    notifyListeners();
+  }
 
   Future<bool?> login(String email, String password) async {
     try {
       final user = await userRepository.login(LoginUserData(email: email, password: password));
       _userData = user.data!;
+      userLocalStorage.saveUser(_userData);
       _showNetworkErrorSnackBar = false;
       notifyListeners();
 
@@ -49,6 +56,7 @@ class MainViewModel extends ChangeNotifier {
           planning: Planning()
       ));
       _userData = user.data!;
+      userLocalStorage.saveUser(_userData);
       _showNetworkErrorSnackBar = false;
       notifyListeners();
       return true;
@@ -65,6 +73,7 @@ class MainViewModel extends ChangeNotifier {
       _userData = User(
           planning: Planning()
       );
+      userLocalStorage.deleteUser();
       _showNetworkErrorSnackBar = false;
     } catch (e) {
       _showNetworkErrorSnackBar = true;
@@ -83,6 +92,7 @@ class MainViewModel extends ChangeNotifier {
         value: amount
       ), _userData.id);
       _userData = user.data!;
+      userLocalStorage.saveUser(_userData);
       _showNetworkErrorSnackBar = false;
     } catch (e) {
       _showNetworkErrorSnackBar = true;

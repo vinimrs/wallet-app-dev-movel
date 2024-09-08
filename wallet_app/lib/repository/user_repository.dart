@@ -12,7 +12,7 @@ class UserRepository {
   late final Dio _dio;
   bool _isStreamingBoard = false;
 
-  UserRepository([bool test = false]) {
+   UserRepository([bool test = false]) {
     if (test) {
       _dio = Dio(BaseOptions(baseUrl: TO_TEST_URL));
     } else {
@@ -69,6 +69,22 @@ class UserRepository {
       }
     } catch (e) {
       throw Exception('Error adding transaction: $e');
+    }
+  }
+
+  Future<UserApiResponse> getUserById(int userId) async {
+    try {
+      final response = await _dio.get(
+        '/users/$userId',
+      );
+
+      if (response.statusCode == 200) {
+        return UserApiResponse.fromJson(response.data);
+      } else {
+        throw Exception('Failed to get the user');
+      }
+    } catch (e) {
+      throw Exception('Error getting user: $e');
     }
   }
 }
