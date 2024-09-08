@@ -25,7 +25,7 @@ app.post("/login", async (req, res) => {
       res.status(200).json({
         success: true,
         message: "login success",
-        user: b,
+        data: b,
       });
       return;
     }
@@ -34,6 +34,7 @@ app.post("/login", async (req, res) => {
   res.status(404).json({
     success: false,
     message: "Usuário não existe ou senha inválida",
+    data: null,
   });
 });
 
@@ -44,7 +45,7 @@ app.post("/users", async (req, res) => {
     res.status(400).json({
       success: false,
       message: "user already exists",
-      user: null,
+      data: null,
     });
     return;
   }
@@ -52,7 +53,7 @@ app.post("/users", async (req, res) => {
   res.status(200).json({
     success: true,
     message: "user added",
-    user: user,
+    data: user,
   });
 });
 
@@ -62,7 +63,7 @@ app.post("/users/:id/transactions", async (req, res) => {
     res.status(404).json({
       success: false,
       message: "user not found",
-      user: null,
+      data: null,
     });
     return;
   }
@@ -82,7 +83,7 @@ app.post("/users/:id/transactions", async (req, res) => {
   res.status(200).json({
     success: true,
     message: "transaction added",
-    user: user,
+    data: user,
   });
 });
 
