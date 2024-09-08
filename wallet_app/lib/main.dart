@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'ui/theme.dart';
 import 'ui/AppNavigator.dart';
 
 void main() {
@@ -11,7 +10,6 @@ class WalletApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'WalletApp',
-      theme: walletAppTheme(),
       home: AppNavigator(),
     );
   }

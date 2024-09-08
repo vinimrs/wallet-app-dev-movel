@@ -45,7 +45,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 children: <Widget>[
                   TextButton(
                     onPressed: () {
-                      // handle register button click
+                      Navigator.pushNamed(context, 'register');
                     },
                     child: Text(
                       'No account? Register',
@@ -58,7 +58,7 @@ class _LoginScreenState extends State<LoginScreen> {
               ElevatedButton(
                 style: ElevatedButton.styleFrom(backgroundColor: greenColor),
                 onPressed: () {
-                  // Login logic here
+                  Navigator.pushNamed(context, 'main');
                 },
                 child: Text('Login', style: TextStyle(fontSize: 16)),
               ),

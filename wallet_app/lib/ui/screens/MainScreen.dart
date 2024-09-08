@@ -1,76 +1,173 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
-class MainScreen extends StatelessWidget {
+class MainScreen extends StatefulWidget {
+  final VoidCallback onNewTransactionClicked;
+  final VoidCallback onLogoutClicked;
+
+  MainScreen({
+    required this.onNewTransactionClicked,
+    required this.onLogoutClicked,
+  });
+
+  @override
+  _MainScreenState createState() => _MainScreenState();
+}
+
+class Transaction {
+  final String category;
+  final String description;
+  final double value;
+  final String date;
+  final bool expense;
+
+  Transaction({
+    required this.category,
+    required this.description,
+    required this.value,
+    required this.date,
+    required this.expense,
+  });
+}
+
+
+class _MainScreenState extends State<MainScreen> {
+  String userName = "Usuário";
+  double balance = 1000.0;
+  List<Transaction> transactions = [];
+
   @override
   Widget build(BuildContext context) {
-    final String currency = "R\$"; // Simulating stringResource access for currency
-    // This assumes viewModel is provided higher in the widget tree
-    final viewModel = Provider.of<MainViewModel>(context);
+    final moeda = "R\$";
 
     return Scaffold(
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
-          children: <Widget>[
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: <Widget>[
-                Text('Hello, ${viewModel.getUserName()}', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
+              children: [
+                Text(
+                  "${"Olá"}, $userName",
+                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                ),
                 ElevatedButton(
-                  style: ElevatedButton.styleFrom(primary: Color(0xFF01AA71)),
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Color(0xFF01AA71),
+                  ),
                   onPressed: () {
-                    viewModel.logout();
-                    // Handle logout logic here
+
+                    Navigator.pushNamed(context, 'login');
                   },
-                  child: Text('Logout'),
+                  child: Text("Logout"),
                 ),
               ],
             ),
             SizedBox(height: 16),
-            Text('Balance', textAlign: TextAlign.center, style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18)),
+            Center(
+              child: Text(
+                "Saldo",
+                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+              ),
+            ),
             SizedBox(height: 8),
-            Card(
-              color: Color(0xFF01AA71),
-              child: Container(
-                width: 200,
-                alignment: Alignment.center,
-                padding: EdgeInsets.all(16),
-                child: Text(
-                  '$currency ${NumberFormat("#,##0.00", "pt_BR").format(viewModel.userData.planning.balance)}',
-                  style: TextStyle(color: Colors.white, fontSize: 24),
+            Center(
+              child: Card(
+                color: Color(0xFF01AA71),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(8),
+                ),
+                child: Padding(
+                  padding: const EdgeInsets.all(16.0),
+                  child: Text(
+                    "$moeda ${NumberFormat.currency(locale: "pt_BR", symbol: "").format(balance)}",
+                    style: TextStyle(color: Colors.white, fontSize: 24),
+                  ),
                 ),
               ),
             ),
             SizedBox(height: 16),
-            Text('Overview', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18)),
+            Text(
+              "Visão Geral",
+              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+            ),
             SizedBox(height: 8),
             Expanded(
               child: ListView.builder(
-                itemCount: viewModel.userData.planning.transactions.length,
+                itemCount: transactions.length,
                 itemBuilder: (context, index) {
-                  final transaction = viewModel.userData.planning.transactions[index];
-                  return ListTile(
-                    leading: Icon(Icons.shopping_cart, color: transaction.expense ? Colors.red : Colors.green),
-                    title: Text('${transaction.category} - ${transaction.description}'),
-                    subtitle: Text(transaction.date),
-                    trailing: Text(
-                      '${transaction.value < 0 ? "-" : "+"}$currency ${NumberFormat("#,##0.00", "pt_BR").format(transaction.value.abs())}',
-                      style: TextStyle(color: transaction.value < 0 ? Colors.red : Colors.green),
-                    ),
+                  final transaction = transactions[index];
+                  return RecentItem(
+                    category: "${transaction.category} - ${transaction.description}",
+                    amount: transaction.value < 0
+                        ? "- $moeda ${NumberFormat.currency(locale: "pt_BR", symbol: "").format(transaction.value + 2 * (-transaction.value))}"
+                        : "+ $moeda ${NumberFormat.currency(locale: "pt_BR", symbol: "").format(transaction.value)}",
+                    date: transaction.date,
+                    iconColor: transaction.expense ? Colors.red : Colors.green,
                   );
                 },
               ),
             ),
+            SizedBox(height: 8),
             ElevatedButton(
-              style: ElevatedButton.styleFrom(primary: Color(0xFF01AA71)),
-              onPressed: () {
-                // Handle new transaction logic here
-              },
-              child: Text('New Transaction', style: TextStyle(color: Colors.white)),
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Color(0xFF01AA71),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(8),
+                ),
+                padding: EdgeInsets.symmetric(horizontal: 16),
+              ),
+              onPressed: widget.onNewTransactionClicked,
+              child: Text("Nova Transação", style: TextStyle(color: Colors.white)),
             ),
           ],
         ),
+      ),
+    );
+  }
+}
+
+class RecentItem extends StatelessWidget {
+  final String category;
+  final String amount;
+  final String date;
+  final Color iconColor;
+
+  RecentItem({
+    required this.category,
+    required this.amount,
+    required this.date,
+    required this.iconColor,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: Row(
+        children: [
+          Icon(
+            Icons.shopping_cart,
+            color: iconColor,
+            size: 32,
+          ),
+          SizedBox(width: 8),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(category, style: TextStyle(fontWeight: FontWeight.bold)),
+                Text(date, style: TextStyle(color: Colors.grey)),
+              ],
+            ),
+          ),
+          Text(
+            amount,
+            style: TextStyle(color: amount.startsWith("-") ? Colors.red : Colors.green),
+          ),
+        ],
       ),
     );
   }
