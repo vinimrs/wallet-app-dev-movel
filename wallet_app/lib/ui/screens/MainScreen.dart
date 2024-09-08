@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
+import 'package:wallet_app/ui/screens/main_view_model.dart';
 
 class MainScreen extends StatefulWidget {
   final VoidCallback onNewTransactionClicked;
@@ -32,12 +34,13 @@ class Transaction {
 
 
 class _MainScreenState extends State<MainScreen> {
-  String userName = "Usuário";
-  double balance = 1000.0;
-  List<Transaction> transactions = [];
 
   @override
   Widget build(BuildContext context) {
+    final viewModel = Provider.of<MainViewModel>(context, listen: true);
+    final user = viewModel.userData;
+    final transactions = user.transactions;
+    final balance = user.balance;
     final moeda = "R\$";
 
     return Scaffold(
@@ -50,7 +53,7 @@ class _MainScreenState extends State<MainScreen> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
-                  "${"Olá"}, $userName",
+                  "${"Olá"}, ${user.fullName}",
                   style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
                 ),
                 ElevatedButton(

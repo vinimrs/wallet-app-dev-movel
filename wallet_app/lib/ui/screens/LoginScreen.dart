@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:wallet_app/ui/screens/main_view_model.dart';
 
 class LoginScreen extends StatefulWidget {
   @override
@@ -13,6 +14,8 @@ class _LoginScreenState extends State<LoginScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final viewModel = Provider.of<MainViewModel>(context);
+
     return Scaffold(
       body: Center(
         child: Padding(
@@ -57,8 +60,14 @@ class _LoginScreenState extends State<LoginScreen> {
               SizedBox(height: 16),
               ElevatedButton(
                 style: ElevatedButton.styleFrom(backgroundColor: greenColor),
-                onPressed: () {
-                  Navigator.pushNamed(context, 'main');
+                onPressed: () async {
+                  bool? success = await viewModel.login(emailController.text, passwordController.text);
+                  if (success != true) {
+                    String message = viewModel.errorMessage;
+                    ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(message)));
+                  } else {
+                    Navigator.pushNamed(context, 'main');
+                  }
                 },
                 child: Text('Login', style: TextStyle(fontSize: 16)),
               ),

@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:provider/provider.dart';
+import 'package:wallet_app/ui/screens/main_view_model.dart';
 
 class RegisterScreen extends StatefulWidget {
   final VoidCallback onRegisterClicked;
@@ -21,13 +23,10 @@ class _RegisterScreenState extends State<RegisterScreen> {
   final TextEditingController passwordController = TextEditingController();
   bool isLoading = false;
 
-  void register() async {
-
-  }
-
   @override
   Widget build(BuildContext context) {
     final greenColor = Color(0xFF01AA71);
+    final viewModel = Provider.of<MainViewModel>(context, listen: true);
 
     return Scaffold(
       body: Center(
@@ -74,8 +73,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
               ),
               const SizedBox(height: 8.0),
               TextButton(
-                onPressed: (){
-                  Navigator.pushNamed(context, 'login');
+                onPressed: () {
+                    Navigator.pushNamed(context, 'login');
                 },
                 child: Text(
                   'Already have an account? Login',
@@ -99,7 +98,23 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     borderRadius: BorderRadius.circular(8.0),
                   ),
                 ),
-                onPressed: register,
+                onPressed: () async {
+                  bool? success = await viewModel.addUser(
+                    emailController.text,
+                    passwordController.text,
+                    nameController.text,
+                  );
+                  if(success != true) {
+                    String message = viewModel.errorMessage;
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(
+                        content: Text(message),
+                      ),
+                    );
+                  } else {
+                    Navigator.pushNamed(context, 'main');
+                  }
+                },
                 child: Text(
                   'Register',
                   style: TextStyle(fontSize: 16.0),
