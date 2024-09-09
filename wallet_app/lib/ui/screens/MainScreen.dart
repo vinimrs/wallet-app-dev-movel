@@ -41,6 +41,7 @@ class _MainScreenState extends State<MainScreen> {
   User _user = User(
     planning: Planning(),
   );
+  bool isLoading = true;
 
   @override
   void initState() {
@@ -54,6 +55,11 @@ class _MainScreenState extends State<MainScreen> {
     if (userStored.name != "") {
       setState(() {
         _user = userStored;
+        isLoading = false;
+      });
+    } else {
+      setState(() {
+        isLoading = false;
       });
     }
 
@@ -61,8 +67,12 @@ class _MainScreenState extends State<MainScreen> {
 
   @override
   Widget build(BuildContext context) {
+
+    if (isLoading) {
+      return Center(child: CircularProgressIndicator()); // Exibe carregamento até a inicialização
+    }
     final viewModel = Provider.of<MainViewModel>(context, listen: true);
-    final user = viewModel.userData ?? _user;
+    final user = viewModel.userData.name.length > 0 ? viewModel.userData : _user;
     final transactions = user.transactions;
     final balance = user.balance;
     final moeda = "R\$";
