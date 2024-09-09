@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'screens/LoginScreen.dart';
 import 'screens/RegisterScreen.dart';
 import 'screens/MainScreen.dart';
+import 'screens/TransactionScreen.dart';
 
 class AppNavigator extends StatelessWidget {
   @override
@@ -31,6 +32,17 @@ class AppNavigator extends StatelessWidget {
               },
               onLogoutClicked: () {
                 print("Logout clicked");
+              },
+            );
+            break;
+          case 'transaction':
+            builder = (BuildContext _) => TransactionScreen(
+              onTransactionConfirmed: () {
+                print("New transaction clicked");
+              },
+
+              onTransactionCancelled: () {
+                print("New transaction clicked");
               },
             );
             break;

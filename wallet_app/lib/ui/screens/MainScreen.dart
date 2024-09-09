@@ -146,7 +146,7 @@ class _MainScreenState extends State<MainScreen> {
                 ),
                 padding: EdgeInsets.symmetric(horizontal: 16),
               ),
-              onPressed: widget.onNewTransactionClicked,
+              onPressed: () {Navigator.pushNamed(context, 'register'); },
               child: Text("Nova Transação", style: TextStyle(color: Colors.white)),
             ),
           ],
