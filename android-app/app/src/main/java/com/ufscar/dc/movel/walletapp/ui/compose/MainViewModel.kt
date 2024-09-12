@@ -36,7 +36,7 @@ class MainViewModel : ViewModel() {
                 if(response.success) {
                     showNetworkErrorSnackBar = false
                     errorMessage = ""
-                    userData = response.user
+                    userData = response.data
                 } else {
                     errorMessage = response.message
                     showNetworkErrorSnackBar = true
@@ -60,7 +60,7 @@ class MainViewModel : ViewModel() {
                 if(response.success) {
                     showNetworkErrorSnackBar = false
                     errorMessage = ""
-                    userData = response.user
+                    userData = response.data
                 } else {
                     errorMessage = response.message
                     showNetworkErrorSnackBar = true
@@ -94,7 +94,7 @@ class MainViewModel : ViewModel() {
                 if(response.success) {
                     showNetworkErrorSnackBar = false
                     errorMessage = ""
-                    userData = response.user
+                    userData = response.data
                 } else {
                     errorMessage = response.message
                     showNetworkErrorSnackBar = true

@@ -156,7 +156,7 @@ class _MainScreenState extends State<MainScreen> {
                 ),
                 padding: EdgeInsets.symmetric(horizontal: 16),
               ),
-              onPressed: () {Navigator.pushNamed(context, 'register'); },
+              onPressed: () {Navigator.pushNamed(context, 'transaction'); },
               child: Text("Nova Transação", style: TextStyle(color: Colors.white)),
             ),
           ],
