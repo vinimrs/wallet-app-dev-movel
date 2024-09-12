@@ -1,0 +1,19 @@
+{
+  "title": "New Transaction",
+  "descriptionLabel": "Description",
+  "amountLabel": "Amount",
+  "incomeButton": "Income",
+  "expenseButton": "Expense",
+  "hello": "Hello",
+  "logout": "Logout",
+  "balance": "Balance",
+  "overview": "Overview",
+  "newTransaction": "New Transaction",
+  "welcome": "Welcome",
+  "email": "Email",
+  "password": "Password",
+  "noAccount": "No account? Register",
+  "register": "Register",
+  "name": "Name",
+  "haveAccount": "Already have an account? Login"
+}

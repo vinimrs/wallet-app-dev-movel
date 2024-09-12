@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class TransactionScreen extends StatefulWidget {
   final VoidCallback onTransactionConfirmed;
@@ -22,17 +23,21 @@ class _TransactionScreenState extends State<TransactionScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('New Transaction'),
+        title: Text(AppLocalizations.of(context)!.title),
         actions: [
           IconButton(
             icon: Icon(Icons.check),
             onPressed: (){
-
+              // Implement your logic for transaction confirmed
+              widget.onTransactionConfirmed();
             },
           ),
           IconButton(
             icon: Icon(Icons.close),
-            onPressed: () {},
+            onPressed: () {
+              // Implement your logic for transaction cancelled
+              widget.onTransactionCancelled();
+            },
           ),
         ],
       ),
@@ -45,22 +50,22 @@ class _TransactionScreenState extends State<TransactionScreen> {
               onPressed: (int index) {
                 setState(() {
                   transactionType = index == 0 ? 'Income' : 'Expense';
-                  selectedCategory = index == 0 ? 'Income' : '';
+                  selectedCategory = (transactionType == 'Expense' && categories.isNotEmpty) ? categories.first : 'Income';
                 });
               },
-              children: [Text('Income'), Text('Expense')],
+              children: [Text(AppLocalizations.of(context)!.incomeButton), Text(AppLocalizations.of(context)!.expenseButton)],
             ),
             TextField(
               controller: descriptionController,
               decoration: InputDecoration(
-                labelText: 'Description',
+                labelText: AppLocalizations.of(context)!.descriptionLabel,
               ),
               keyboardType: TextInputType.text,
             ),
             TextField(
               controller: amountController,
               decoration: InputDecoration(
-                labelText: 'Amount',
+                labelText: AppLocalizations.of(context)!.amountLabel,
               ),
               keyboardType: TextInputType.numberWithOptions(decimal: true),
             ),

@@ -1,0 +1,19 @@
+{
+  "title": "Nova Transação",
+  "descriptionLabel": "Descrição",
+  "amountLabel": "Valor",
+  "incomeButton": "Renda",
+  "expenseButton": "Despesa",
+  "hello": "Olá",
+  "logout": "Sair",
+  "balance": "Saldo",
+  "overview": "Visão Geral",
+  "newTransaction": "Nova Transação",
+  "welcome": "Bem Vindo",
+  "email": "Email",
+  "password": "Senha",
+  "noAccount": "Não tem conta? Registrar",
+  "register": "Registrar",
+  "name": "Nome",
+  "haveAccount": "Já tem uma conta? Login"
+}

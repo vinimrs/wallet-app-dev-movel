@@ -4,6 +4,7 @@ import 'package:wallet_app/repository/dto/planning.dart';
 import 'package:wallet_app/repository/dto/user.dart';
 import 'package:wallet_app/shared_preferences/user_local_storage.dart';
 import 'package:wallet_app/ui/screens/main_view_model.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class LoginScreen extends StatefulWidget {
   @override
