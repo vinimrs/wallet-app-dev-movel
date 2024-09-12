@@ -5,6 +5,7 @@ import 'package:wallet_app/repository/dto/planning.dart';
 import 'package:wallet_app/repository/dto/user.dart';
 import 'package:wallet_app/shared_preferences/user_local_storage.dart';
 import 'package:wallet_app/ui/screens/main_view_model.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class MainScreen extends StatefulWidget {
   final VoidCallback onNewTransactionClicked;
@@ -69,7 +70,7 @@ class _MainScreenState extends State<MainScreen> {
   Widget build(BuildContext context) {
 
     if (isLoading) {
-      return Center(child: CircularProgressIndicator()); // Exibe carregamento até a inicialização
+      return Center(child: CircularProgressIndicator());
     }
     final viewModel = Provider.of<MainViewModel>(context, listen: true);
     final user = viewModel.userData.name.length > 0 ? viewModel.userData : _user;
@@ -87,7 +88,7 @@ class _MainScreenState extends State<MainScreen> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
-                  "${"Olá"}, ${user.fullName}",
+                  "$AppLocalizations.of(context)!.hello, ${user.fullName}",
                   style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
                 ),
                 ElevatedButton(
@@ -98,14 +99,14 @@ class _MainScreenState extends State<MainScreen> {
                     viewModel.logout();
                     Navigator.pushNamed(context, 'login');
                   },
-                  child: Text("Logout"),
+                  child: Text(AppLocalizations.of(context)!.overview),
                 ),
               ],
             ),
             SizedBox(height: 16),
             Center(
               child: Text(
-                "Saldo",
+                  AppLocalizations.of(context)!.balance,
                 style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
               ),
             ),
@@ -127,7 +128,7 @@ class _MainScreenState extends State<MainScreen> {
             ),
             SizedBox(height: 16),
             Text(
-              "Visão Geral",
+              AppLocalizations.of(context)!.overview,
               style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
             ),
             SizedBox(height: 8),
@@ -157,7 +158,7 @@ class _MainScreenState extends State<MainScreen> {
                 padding: EdgeInsets.symmetric(horizontal: 16),
               ),
               onPressed: () {Navigator.pushNamed(context, 'transaction'); },
-              child: Text("Nova Transação", style: TextStyle(color: Colors.white)),
+              child: Text(AppLocalizations.of(context)!.newTransaction, style: TextStyle(color: Colors.white)),
             ),
           ],
         ),
