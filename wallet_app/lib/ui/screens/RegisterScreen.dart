@@ -44,14 +44,14 @@ class _RegisterScreenState extends State<RegisterScreen> {
               ),
               const SizedBox(height: 16.0),
               Text(
-                'Register',
+                AppLocalizations.of(context)!.register,
                 style: TextStyle(fontSize: 32.0),
               ),
               const SizedBox(height: 16.0),
               TextField(
                 controller: nameController,
                 decoration: InputDecoration(
-                  labelText: 'Name',
+                  labelText: AppLocalizations.of(context)!.name,
                   border: OutlineInputBorder(),
                 ),
               ),
@@ -59,7 +59,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
               TextField(
                 controller: emailController,
                 decoration: InputDecoration(
-                  labelText: 'Email',
+                  labelText: AppLocalizations.of(context)!.email,
                   border: OutlineInputBorder(),
                 ),
               ),
@@ -68,7 +68,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 controller: passwordController,
                 obscureText: true,
                 decoration: InputDecoration(
-                  labelText: 'Password',
+                  labelText: AppLocalizations.of(context)!.password,
                   border: OutlineInputBorder(),
                 ),
               ),
@@ -78,7 +78,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     Navigator.pushNamed(context, 'login');
                 },
                 child: Text(
-                  'Already have an account? Login',
+                  AppLocalizations.of(context)!.haveAccount,
                   style: TextStyle(
                     color: greenColor,
                     decoration: TextDecoration.underline,
@@ -117,7 +117,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   }
                 },
                 child: Text(
-                  'Register',
+                  AppLocalizations.of(context)!.register,
                   style: TextStyle(fontSize: 16.0),
                 ),
               ),

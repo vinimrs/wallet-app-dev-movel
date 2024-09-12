@@ -36,7 +36,6 @@ class Transaction {
   });
 }
 
-
 class _MainScreenState extends State<MainScreen> {
   UserLocalStorage repository = UserLocalStorage();
   User _user = User(
@@ -48,7 +47,6 @@ class _MainScreenState extends State<MainScreen> {
   void initState() {
     super.initState();
     initializeState();
-
   }
 
   Future<void> initializeState() async {
@@ -63,12 +61,10 @@ class _MainScreenState extends State<MainScreen> {
         isLoading = false;
       });
     }
-
   }
 
   @override
   Widget build(BuildContext context) {
-
     if (isLoading) {
       return Center(child: CircularProgressIndicator());
     }
@@ -80,7 +76,7 @@ class _MainScreenState extends State<MainScreen> {
 
     return Scaffold(
       body: Padding(
-        padding: const EdgeInsets.all(16.0),
+        padding: const EdgeInsets.all(24),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -88,7 +84,7 @@ class _MainScreenState extends State<MainScreen> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
-                  "$AppLocalizations.of(context)!.hello, ${user.fullName}",
+                  "${AppLocalizations.of(context)!.hello}, ${user.fullName}",
                   style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
                 ),
                 ElevatedButton(
@@ -99,14 +95,14 @@ class _MainScreenState extends State<MainScreen> {
                     viewModel.logout();
                     Navigator.pushNamed(context, 'login');
                   },
-                  child: Text(AppLocalizations.of(context)!.overview),
+                  child: Text(AppLocalizations.of(context)!.logout),
                 ),
               ],
             ),
             SizedBox(height: 16),
             Center(
               child: Text(
-                  AppLocalizations.of(context)!.balance,
+                AppLocalizations.of(context)!.balance,
                 style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
               ),
             ),
@@ -148,18 +144,28 @@ class _MainScreenState extends State<MainScreen> {
                 },
               ),
             ),
-            SizedBox(height: 8),
-            ElevatedButton(
-              style: ElevatedButton.styleFrom(
-                backgroundColor: Color(0xFF01AA71),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(8),
+            SizedBox(height: 16),
+            Align(
+              alignment: Alignment.bottomCenter,
+              child: ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Color(0xFF01AA71),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                  padding: EdgeInsets.symmetric(horizontal: 16),
+                  minimumSize: Size(200, 50), // Tamanho ajustado do botão
                 ),
-                padding: EdgeInsets.symmetric(horizontal: 16),
+                onPressed: () {
+                  Navigator.pushNamed(context, 'transaction');
+                },
+                child: Text(
+                  AppLocalizations.of(context)!.newTransaction,
+                  style: TextStyle(color: Colors.white),
+                ),
               ),
-              onPressed: () {Navigator.pushNamed(context, 'transaction'); },
-              child: Text(AppLocalizations.of(context)!.newTransaction, style: TextStyle(color: Colors.white)),
             ),
+            SizedBox(height: 16), // Espaçamento entre o botão e o fim da tela
           ],
         ),
       ),
@@ -187,7 +193,7 @@ class RecentItem extends StatelessWidget {
       child: Row(
         children: [
           Icon(
-            Icons.shopping_cart,
+            Icons.attach_money,
             color: iconColor,
             size: 32,
           ),
@@ -203,7 +209,9 @@ class RecentItem extends StatelessWidget {
           ),
           Text(
             amount,
-            style: TextStyle(color: amount.startsWith("-") ? Colors.red : Colors.green),
+            style: TextStyle(
+              color: amount.startsWith("-") ? Colors.red : Colors.green,
+            ),
           ),
         ],
       ),

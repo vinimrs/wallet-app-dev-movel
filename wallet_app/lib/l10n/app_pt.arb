@@ -15,5 +15,10 @@
   "noAccount": "Não tem conta? Registrar",
   "register": "Registrar",
   "name": "Nome",
-  "haveAccount": "Já tem uma conta? Login"
+  "haveAccount": "Já tem uma conta? Login",
+  "categoryLabel": "Categoria",
+  "categoryMarket": "Mercado",
+  "categoryLeisure": "Lazer",
+  "categoryHealth": "Saúde",
+  "categoryBIlls": "Contas"
 }

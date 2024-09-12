@@ -46,12 +46,12 @@ class _LoginScreenState extends State<LoginScreen> {
             children: <Widget>[
               Icon(Icons.email, size: 64, color: greenColor),
               SizedBox(height: 16),
-              Text('Welcome back', style: TextStyle(fontSize: 32)),
+              Text(AppLocalizations.of(context)!.welcome, style: TextStyle(fontSize: 32)),
               SizedBox(height: 16),
               TextField(
                 controller: emailController,
                 decoration: InputDecoration(
-                  labelText: 'Email',
+                  labelText: AppLocalizations.of(context)!.email,
                   border: OutlineInputBorder(),
                 ),
               ),
@@ -59,7 +59,7 @@ class _LoginScreenState extends State<LoginScreen> {
               TextField(
                 controller: passwordController,
                 decoration: InputDecoration(
-                  labelText: 'Password',
+                  labelText: AppLocalizations.of(context)!.password,
                   border: OutlineInputBorder(),
                 ),
                 obscureText: true,
@@ -72,7 +72,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       Navigator.pushNamed(context, 'register');
                     },
                     child: Text(
-                      'No account? Register',
+                      AppLocalizations.of(context)!.noAccount,
                       style: TextStyle(color: greenColor, decoration: TextDecoration.underline),
                     ),
                   ),

@@ -29,7 +29,6 @@ class WalletApp extends StatelessWidget {
     return MaterialApp(
       title: 'WalletApp',
       supportedLocales: L10n.all,
-      locale: const Locale('pt'),
       localizationsDelegates: const [
         AppLocalizations.delegate,
         GlobalMaterialLocalizations.delegate,
